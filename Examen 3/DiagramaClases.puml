@@ -1,0 +1,68 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+enum EstadoDisponibilidad {
+  DISPONIBLE
+  POCAS_UNIDADES
+  AGOTADO
+}
+
+class TiendaEcoPaso {
+  - nombre : String = "EcoPaso"
+  - bannerHero  
+
+  + obtenerCatalogoPrincipal()
+  + filtrarPorCategoria(idCat
+}
+
+class PromocionHero {
+  - titulo : String
+  - subtitulo : String
+  - productoDestacado : Producto
+  + ejecutarCompraRapida() : Pedido
+}
+
+class Categoria {
+  - idCategoria : int
+  - nombre : String
+  - activa : boolean
+}
+
+class Producto {
+  - idProducto : int
+  - nombre : String
+  - precio : double
+  - stock : int
+  - imagenUrl : String
+  + obtenerEstado() : EstadoDisponibilidad
+  + obtenerEtiquetaTexto() : String
+  + obtenerVariableColor() : String
+  + estaDisponible() : boolean
+}
+
+class Pedido {
+  - idPedido : int
+  - fecha : Date
+  - total : double
+  + agregarProducto(p : Producto) : boolean
+  + calcularTotal() : double
+  + confirmarCompra() : boolean
+}
+
+class TemaEstilos {
+  - colorFondo60 : String = "#F7F9F7"
+  - colorSecundario30 : String = "#D9E8EC"
+  - colorPrimario30 : String = "#8BA888"
+  - colorCTA10 : String = "#234729"
+  + validarContrasteWCAG() : boolean
+}
+
+TiendaEcoPaso "1" *-- "1" PromocionHero : (RF-01)
+TiendaEcoPaso "1" o-- "1..*" Categoria : (RF-01)
+TiendaEcoPaso "1" o-- "1..*" Producto : (RF-01)
+Categoria "1" -- "0..*" Producto 
+PromocionHero "1" --> "1" Producto 
+Producto ..> EstadoDisponibilidad : (RF-02 / RF-04)
+Producto ..> TemaEstilos : (RNF-01 a RNF-04)
+Pedido "1" *-- "1..*" Producto : (RF-03)
+@enduml

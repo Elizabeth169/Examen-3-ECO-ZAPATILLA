@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoPaso - Calzado Ecológico</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* RNF-04: Variables globales de diseño reutilizables */
+    :root {
+      --color-bg-neutral: #F7F9F7;     /* 60% Fondo neutro/claro (RNF-02) */
+      --color-secondary-blue: #D9E8EC; /* 30% Azul claro natural (RNF-01) */
+      --color-primary: #8BA888;        /* 30% Verde oliva natural (RNF-01) */
+      --color-cta: #234729;            /* 10% Acento oscuro para botones de compra (RNF-02) */
+      --color-cta-hover: #18331D;
+      --color-cta-disabled: #B85A3A;   /* Acento cálido para estado agotado */
+      --color-success: #2E8B57;        /* RF-02: Verde (Disponible) */
+      --color-warning: #E08E26;        /* RF-02: Amarillo/Naranja (Pocas unidades) */
+      --color-danger: #C93B3B;         /* RF-02: Rojo (Agotado) */
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--color-bg-neutral);
+    }
+
+    .bg-eco-blue { background-color: var(--color-secondary-blue); }
+    .bg-eco-primary { background-color: var(--color-primary); }
+    .bg-eco-cta { background-color: var(--color-cta); }
+    .bg-eco-cta:hover { background-color: var(--color-cta-hover); }
+    .bg-eco-disabled { background-color: var(--color-cta-disabled); }
+    .dot-success { background-color: var(--color-success); }
+    .dot-warning { background-color: var(--color-warning); }
+    .dot-danger { background-color: var(--color-danger); }
+
+    /* Fusiona el fondo blanco del dibujo con el color de la tarjeta */
+    .img-boceto {
+      mix-blend-mode: multiply;
+    }
+  </style>
+</head>
+<body class="text-slate-900 min-h-screen flex flex-col justify-between">
+
+  <!-- RF-01: Encabezado de navegación -->
+  <header class="bg-eco-blue border-b-2 border-slate-900">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-xl font-extrabold tracking-tight text-slate-900">🌿 EcoPaso</span>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm font-bold text-slate-900">
+        <a href="#inicio" class="underline">Inicio</a>
+        <a href="#catalogo" class="hover:underline">Catálogo</a>
+        <a href="#sobre-nosotros" class="hover:underline">Nosotros</a>
+      </nav>
+
+      <button onclick="abrirModalCarrito()" class="px-4 py-1.5 rounded-lg bg-eco-cta border-2 border-slate-900 text-white font-bold text-sm flex items-center gap-2 cursor-pointer">
+        <span>🛒 Carrito</span>
+        <span id="contador-carrito" class="bg-white text-slate-900 px-2 py-0.5 rounded-full text-xs font-extrabold">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="inicio" class="max-w-5xl w-full mx-auto px-6 py-8 space-y-8">
+    
+    <!-- RF-01 y RF-03: Banner principal -->
+    <section class="bg-eco-primary rounded-xl border-2 border-slate-900 p-8 shadow-sm">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+        
+        <div class="md:col-span-5 space-y-5">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-snug">
+            ¡Calzado Ecológico al Mejor Precio!
+          </h1>
+          <p class="text-slate-900 text-sm sm:text-base font-medium">
+            Comodidad y Sostenibilidad en cada paso......
+          </p>
+          <div class="pt-1">
+            <button onclick="agregarAlCarrito('Pack Estrella EcoPaso', 950)" class="px-6 py-2.5 rounded-lg bg-eco-cta border-2 border-slate-900 text-white font-bold text-sm shadow-[3px_3px_0px_#0f172a] active:translate-y-0.5 transition cursor-pointer">
+              Comprar ahora
+            </button>
+          </div>
+        </div>
+
+        <!-- Las 2 zapatillas con extensión .jpg -->
+        <div class="md:col-span-7 grid grid-cols-2 gap-4 items-center bg-white/65 rounded-xl border-2 border-slate-900 p-4">
+          <div class="flex justify-center">
+            <img src="tenis-slipon.jpg" alt="Tenis ecológico sin agujetas" class="h-32 object-contain img-boceto">
+          </div>
+          <div class="flex justify-center">
+            <img src="tenis-estrella.jpg" alt="Tenis estrella sostenible" class="h-36 object-contain img-boceto">
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RF-01: Barra de categorías -->
+    <section id="catalogo" aria-label="Categorías" class="max-w-3xl mx-auto bg-eco-blue rounded-lg border-2 border-slate-900 px-4 py-2 flex flex-wrap items-center justify-between gap-2">
+      <button onclick="filtrarCategoria(this)" class="cat-btn px-4 py-1.5 rounded bg-white border-2 border-slate-900 font-bold text-sm text-slate-900 cursor-pointer">
+        Nuevos
+      </button>
+      <button onclick="filtrarCategoria(this)" class="cat-btn px-4 py-1.5 rounded font-semibold text-sm text-slate-900 hover:bg-white/60 cursor-pointer">
+        Más vendidos
+      </button>
+      <button onclick="filtrarCategoria(this)" class="cat-btn px-4 py-1.5 rounded font-semibold text-sm text-slate-900 hover:bg-white/60 cursor-pointer">
+        Casual
+      </button>
+      <button onclick="filtrarCategoria(this)" class="cat-btn px-4 py-1.5 rounded font-semibold text-sm text-slate-900 hover:bg-white/60 cursor-pointer">
+        Deporte
+      </button>
+      <button onclick="filtrarCategoria(this)" class="cat-btn px-4 py-1.5 rounded font-semibold text-sm text-slate-900 hover:bg-white/60 cursor-pointer">
+        Senderismo
+      </button>
+    </section>
+
+    <!-- RF-01: Cuadrícula de 3 productos -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-2">
+
+      <!-- Tarjeta 1: Zapato "Eco Gaia" -->
+      <article class="bg-eco-primary rounded-xl border-2 border-slate-900 p-5 shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-slate-900 text-xs font-bold text-slate-900 mb-4">
+            <span class="w-3 h-3 rounded-full dot-success border border-slate-900"></span>
+            <span>Disponible</span>
+          </div>
+
+          <div class="bg-white/80 rounded-lg border-2 border-slate-900 p-3 mb-4 flex items-center justify-center h-40">
+            <img src="zapato-gaia.jpg" alt="Zapato Eco Gaia" class="max-h-32 object-contain img-boceto">
+          </div>
+
+          <h2 class="text-base font-extrabold text-slate-900">Zapato "Eco Gaia"</h2>
+          <p class="text-lg font-extrabold text-slate-900 mt-1 mb-5">$700</p>
+        </div>
+
+        <div class="flex justify-center">
+          <button onclick="agregarAlCarrito('Zapato Eco Gaia', 700)" class="w-4/5 py-2.5 rounded-lg bg-eco-cta border-2 border-slate-900 text-white font-bold text-sm shadow-[3px_3px_0px_#0f172a] active:translate-y-0.5 transition cursor-pointer">
+            Comprar ahora
+          </button>
+        </div>
+      </article>
+
+      <!-- Tarjeta 2: Zapato "Río" Low Stock -->
+      <article class="bg-eco-primary rounded-xl border-2 border-slate-900 p-5 shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-slate-900 text-xs font-bold text-slate-900 mb-4">
+            <span class="w-3 h-3 rounded-full dot-warning border border-slate-900"></span>
+            <span>Disponible (últimas unidades)</span>
+          </div>
+
+          <div class="bg-white/80 rounded-lg border-2 border-slate-900 p-3 mb-4 flex items-center justify-center h-40">
+            <img src="zapato-rio.jpg" alt="Zapato Río Low Stock" class="max-h-32 object-contain img-boceto">
+          </div>
+
+          <h2 class="text-base font-extrabold text-slate-900">Zapato "Río" Low Stock</h2>
+          <p class="text-lg font-extrabold text-slate-900 mt-1 mb-5">$850</p>
+        </div>
+
+        <div class="flex justify-center">
+          <button onclick="agregarAlCarrito('Zapato Río Low Stock', 850)" class="w-4/5 py-2.5 rounded-lg bg-eco-cta border-2 border-slate-900 text-white font-bold text-sm shadow-[3px_3px_0px_#0f172a] active:translate-y-0.5 transition cursor-pointer">
+            Comprar Ahora
+          </button>
+        </div>
+      </article>
+
+      <!-- Tarjeta 3: Bota "Montana" Agotado -->
+      <article class="bg-eco-primary rounded-xl border-2 border-slate-900 p-5 shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-slate-900 text-xs font-bold text-slate-900 mb-4">
+            <span class="w-3 h-3 rounded-full dot-danger border border-slate-900"></span>
+            <span>Agotado</span>
+          </div>
+
+          <div class="bg-white/80 rounded-lg border-2 border-slate-900 p-3 mb-4 flex items-center justify-center h-40">
+            <img src="bota-montana.jpg" alt="Bota Montana Agotado" class="max-h-32 object-contain img-boceto">
+          </div>
+
+          <h2 class="text-base font-extrabold text-slate-900">Bota "Montana" Agotado</h2>
+          <p class="text-lg font-extrabold text-slate-900 mt-1 mb-5">$1100</p>
+        </div>
+
+        <div class="flex justify-center">
+          <button disabled class="w-4/5 py-2.5 rounded-lg bg-eco-disabled border-2 border-slate-900 text-white font-bold text-sm cursor-not-allowed">
+            Agotado
+          </button>
+        </div>
+      </article>
+
+    </section>
+  </main>
+
+  <footer id="sobre-nosotros" class="bg-eco-blue border-t-2 border-slate-900 py-4 px-6 text-xs font-semibold text-slate-900 mt-8">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <span><strong>EcoPaso</strong> — Calzado Deportivo Sostenible.</span>
+      <span>Paleta análoga natural • Proporción 60-30-10 • Accesibilidad WCAG</span>
+    </div>
+  </footer>
+
+  <!-- Modal del Carrito -->
+  <div id="modal-carrito" class="hidden fixed inset-0 bg-slate-900/50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl border-2 border-slate-900 max-w-sm w-full p-6 shadow-xl">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-extrabold text-slate-900">Tu Carrito EcoPaso</h3>
+        <button onclick="cerrarModalCarrito()" class="text-slate-600 hover:text-slate-900 font-bold">✕</button>
+      </div>
+      <div id="lista-carrito" class="space-y-2 text-sm text-slate-700 mb-4">
+        <p>Aún no has agregado zapatillas.</p>
+      </div>
+      <button onclick="cerrarModalCarrito()" class="w-full py-2.5 rounded-lg bg-eco-cta border-2 border-slate-900 text-white font-bold">
+        Seguir viendo
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let carrito = [];
+
+    function agregarAlCarrito(nombre, precio) {
+      carrito.push({ nombre, precio });
+      document.getElementById("contador-carrito").textContent = carrito.length;
+      actualizarListaCarrito();
+      abrirModalCarrito();
+    }
+
+    function actualizarListaCarrito() {
+      const contenedor = document.getElementById("lista-carrito");
+      if (carrito.length === 0) {
+        contenedor.innerHTML = "<p>Aún no has agregado zapatillas.</p>";
+        return;
+      }
+      let total = 0;
+      contenedor.innerHTML = carrito.map(item => {
+        total += item.precio;
+        return `<div class="flex justify-between border-b border-slate-200 pb-1">
+                  <span class="font-semibold">${item.nombre}</span>
+                  <span class="font-bold">$${item.precio}</span>
+                </div>`;
+      }).join("") + `<div class="flex justify-between pt-2 text-base font-extrabold text-slate-900">
+                      <span>Total:</span>
+                      <span>$${total}</span>
+                    </div>`;
+    }
+
+    function filtrarCategoria(botonSeleccionado) {
+      document.querySelectorAll(".cat-btn").forEach(btn => {
+        btn.className = "cat-btn px-4 py-1.5 rounded font-semibold text-sm text-slate-900 hover:bg-white/60 cursor-pointer";
+      });
+      botonSeleccionado.className = "cat-btn px-4 py-1.5 rounded bg-white border-2 border-slate-900 font-bold text-sm text-slate-900 cursor-pointer";
+    }
+
+    function abrirModalCarrito() {
+      document.getElementById("modal-carrito").classList.remove("hidden");
+    }
+
+    function cerrarModalCarrito() {
+      document.getElementById("modal-carrito").classList.add("hidden");
+    }
+  </script>
+</body>
+</html>

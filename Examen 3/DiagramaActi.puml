@@ -1,0 +1,17 @@
+@startuml
+start
+:Ver página principal;
+:Seleccionar producto;
+:Ver ficha del producto;
+
+if (¿Hay stock?) then (Sí)
+  #LightGreen:Estado disponible\nVerde o naranja + texto;
+  :Clic en Comprar ahora;
+  :Confirmar datos y pago;
+else (No)
+  #Pink:Estado agotado\nRojo + texto;
+  :Elegir otro producto;
+endif
+
+stop
+@enduml
